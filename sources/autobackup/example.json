@@ -1,0 +1,19 @@
+{
+    "eventData": {
+        "version": "v1",
+        "userIdentity": {
+            "type": "USER",
+            "principalId": "name@example.om"
+        },
+        "eventSource": "com.nordcloudapp.com.autobackup",
+        "eventName": "backup.started",
+        "eventTime": "202-07-12T10:55:00",
+        "UID": "UUID",
+        "requestParameters": {
+            "resourceType": "DynamoDB",
+            "resourceArn": "ARN",
+            "region": "eu-west-1",
+            "backupPolicy": "UUID"
+        }
+    }
+}

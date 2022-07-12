@@ -1,0 +1,19 @@
+{
+    "eventData": {
+        "version": "v1",
+        "userIdentity": {
+            "type": "USER",
+            "principalId": "name@example.om"
+        },
+        "eventSource": "com.nordcloudapp.com.klarity",
+        "eventName": "discoveryRule.created",
+        "eventTime": "202-07-12T10:55:00",
+        "UID": "UUID",
+        "requestParameters": {
+            "ruleName": "test",
+            "ruleId": "UUID",
+            "environment": "testEnv",
+            "application": "testApp"
+        }
+    }
+}

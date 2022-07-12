@@ -1,0 +1,19 @@
+{
+    "eventData": {
+        "version": "v1",
+        "userIdentity": {
+            "type": "USER",
+            "principalId": "name@example.om"
+        },
+        "eventSource": "com.nordcloudapp.com.autopatcher",
+        "eventName": "baselinePatching.completed",
+        "eventTime": "202-07-12T10:55:00",
+        "UID": "UUID",
+        "requestParameters": {
+            "machinesCount": 30,
+            "updatedCount": 20,
+            "skippedCount": 3,
+            "noUpdatesCOunt": 7
+        }
+    }
+}

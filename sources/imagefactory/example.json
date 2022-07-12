@@ -1,0 +1,19 @@
+{
+    "eventData": {
+        "version": "v1",
+        "userIdentity": {
+            "type": "USER",
+            "principalId": "name@example.om"
+        },
+        "eventSource": "com.nordcloudapp.com.imagefactory",
+        "eventName": "image.created",
+        "eventTime": "202-07-12T10:55:00",
+        "UID": "UUID",
+        "requestParameters": {
+            "templateId": "UUID",
+            "osType": "Windows",
+            "osVersion": "2019",
+            "hardening": "Level_1"
+        }
+    }
+}
