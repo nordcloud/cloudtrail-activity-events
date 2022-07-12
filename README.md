@@ -114,7 +114,7 @@ For more details regaring Cloud Trail setup please refer to [AWS documentation](
 
 ## Klarity Suite integration
 
-### Description
+### Description 2
 
 Nordcloud Klarity Suite that combines multiple integration is integrated with Cloud Trail Lake to store and monitor customer tenant activity. You can enable this integration to receive logs on activities occurred in your application tenant. Events published by the Nordcloud Klarity Suite can be related to the actions performed by applications on customer cloud environments or any other tenant activity.
 
@@ -158,7 +158,7 @@ Please note that the above list may change in the future once we add new applica
 
 ### Event types
 
-Event types define the activity that happened on application tenant or operation executed by the application on cloud environment. Every application has its own uniq set of event types depending on the functionality. Please check the application specific documentation in [sources](./sources/) directory for more details.
+Event types define the activity tododod that happened on application tenant or operation executed by the application on cloud environment. Every application has its own uniq set of event types depending on the functionality. Please check the application specific documentation in [sources](./sources/) directory for more details.
 
 ## Architecture
 
@@ -166,7 +166,7 @@ Event types define the activity that happened on application tenant or operation
 
 ## Examples
 
-Example events produced by Klarity Suite applications can be found in [sources](./sources/) directory for specific application.
+Example events produced by Klarity Suite applications can be found in [sources](./sources/) directory for specific application. fsdfd
 
 ## Support
 
