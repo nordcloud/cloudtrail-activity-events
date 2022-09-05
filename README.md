@@ -203,7 +203,7 @@ Please note that the above list may change in the future once we add new applica
 
 ### Event Types
 
-Event types define the activity that happened on the application tenant or operation executed by the application in the cloud environment. Every Klarity tool has its own uniq set of events depending on the functionality. Please check the application specific documentation in the [event-sources](https://github.com/nordcloud/cloud-trail-actiovity-events/tree/main/event-sources) directory for more details.
+Event types define the activity that happened on the application tenant or operation executed by the application in the cloud environment. Every Klarity tool has its own uniq set of events depending on the functionality. Please check the application specific documentation in the [event-sources](https://github.com/nordcloud/klarity-cloudtrail-activity-events/tree/main/event-sources) directory for more details.
 
 ## Architecture
 
@@ -235,7 +235,7 @@ As an example, the following activity event is produced by the Klarity Core as a
 }
 ```
 
-You can find a documentation on all activity events produced by the Klarity tools in the [event-sources](https://github.com/nordcloud/cloud-trail-actiovity-events/tree/main/event-sources) directory.
+You can find a documentation on all activity events produced by the Klarity tools in the [event-sources](https://github.com/nordcloud/klarity-cloudtrail-activity-events/tree/main/event-sources) directory.
 
 ## Support
 
