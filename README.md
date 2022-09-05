@@ -86,7 +86,7 @@ For more information, please refer to official [AWS documentation](https://docs.
 
 To receive CloudTrail Events from third-party applications like Nordcloud Klarity following actions are required:
 
-1. Create an IAM role that allows third-party applications to use AWS CloudTrail API. IAM policy can be found in [policy.json](./policy.json) file.
+1. Create an IAM role that allows third-party applications to use AWS CloudTrail API. IAM policy can be found in [policy.json](https://github.com/nordcloud/klarity-cloudtrail-activity-events/tree/main/policy.json) file.
 
 2. Create Event Data Store in AWS CloudTrail Lake to store incoming events. You can do that by running the following API call:
 
@@ -171,7 +171,7 @@ Please note that at the beginning not all Klarity tools will implement AWS Cloud
 ### Enabling integration (manual)
 
 To to manually enable AWS CloudTrail Lake integration with one of Klarity tools please follow the onboarding steps described in [Getting Started](#getting-started) section.
-You can use the [iamRole.yml](./iamRole.yml) AWS CloudFormation template to easily create IAM role with all permissions required by this integration. This will create new IAM role with the trust relationship to the Klarity production account (`855341727128`). IAM Role External ID is optional but we highly encourage you to use it for security reasons.
+You can use the [iamRole.yml](https://github.com/nordcloud/klarity-cloudtrail-activity-events/tree/main/iamRole.yml) AWS CloudFormation template to easily create IAM role with all permissions required by this integration. This will create new IAM role with the trust relationship to the Klarity production account (`855341727128`). IAM Role External ID is optional but we highly encourage you to use it for security reasons.
 
 Once you have created IAM role and AWS CloudTrail ingestion channel please contact with your CSM and provide following information:
 
