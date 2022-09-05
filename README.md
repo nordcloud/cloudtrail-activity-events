@@ -1,98 +1,93 @@
-# Klarity Cloud Trail Open Audit Events
+# Nordcloud Klarity CloudTrail Activity Events
 
-This repository contains all important information and examples related to the Nordcloud Klarity Suite Cloud Trail integration.
+*disclaimer: Cloud Trail Activity Events are not yet fully integrated with the Nordcloud Klarity. It will be delivered based on the customer demand.*
 
-***disclaimer: This document is a draft only. Cloud Trail Open Audit Events are not yet fully integrated with the Nordcloud Klarity Suite applications.***
-
-- [Klarity Cloud Trail Open Audit Events](#klarity-cloud-trail-open-audit-events)
-  - [AWS Cloud Trail Events](#aws-cloud-trail-events)
-    - [Basic information](#basic-information)
+- [Nordcloud Klarity CloudTrail Activity Events](#nordcloud-klarity-cloudtrail-activity-events)
+  - [AWS CloudTrail Activity Events](#aws-cloudtrail-activity-events)
+    - [AWS CloudTrail partner](#aws-cloudtrail-partner)
     - [Event schema](#event-schema)
-    - [Prerequisites](#prerequisites)
-  - [Klarity Suite integration](#klarity-suite-integration)
-    - [Description](#description)
-    - [Enabling integration](#enabling-integration)
+    - [Getting started](#getting-started)
+  - [Nordcloud Klarity](#nordcloud-klarity)
+    - [AWS CloudTrail integration](#aws-cloudtrail-integration)
+    - [Enabling integration (AWS Console)](#enabling-integration-aws-console)
+    - [Enabling integration (manual)](#enabling-integration-manual)
+    - [Disabling integration](#disabling-integration)
     - [Event Sources](#event-sources)
     - [Event types](#event-types)
   - [Architecture](#architecture)
   - [Examples](#examples)
   - [Support](#support)
 
-## AWS Cloud Trail Events
+## AWS CloudTrail Activity Events
 
-### Basic information
+AWS CloudTrail Lake let you use CloudTrail to log and store user activity data from any source in your hybrid environments, such as in-house or SaaS applications hosted on-premises or in the cloud, virtual machines, or containers. You can store, access, analyze, troubleshoot and take action on this data without maintaining multiple log aggregators and reporting tools.
 
-Open audit events let you use CloudTrail to log and store user activity data from any source in your
-hybrid environments, such as in-house or SaaS applications hosted on-premises or in the cloud,
-virtual machines, or containers. You can store, access, analyze, troubleshoot and take action on
-this data without maintaining multiple log aggregators and reporting tools.
+Once you ingest event data from third party application or via `PutAuditEvents` API, you can create event data stores in AWS CloudTrail Lake, and use it to search, query, and analyze the data that is logged from your applications. To help you meet compliance resources this data is backed by a 7-year default retention period.
 
-Once you ingest event data from third party application or `PutAuditEvents` API, you can create event data
-stores in CloudTrail Lake, and use CloudTrail Lake to search, query, and analyze the data that is logged
-from your applications.
+For more information regarding AWS CloudTrail Lake and activity events please refer to official [AWS documentation](https://docs.aws.amazon.com/).
 
-For more information please refer to [AWS documentation](https://docs.aws.amazon.com/).
+### AWS CloudTrail partner
+
+AWS CloudTrail Lake supports ingesting activity logs from the trusted entities like Nordcloud Klarity that is being an official AWS Partner in CloudTrail Lake activity events.
+
+AWS and Klarity teams works together to deliver this integration allowing you to simplify the process of consolidating activity data. It enables the enhanced visibility across applications and environments. In a few steps you can consolidate Klarity activity logs together with AWS activity logs without having additional processing pipelines.
+
+To get started with Klarity integration please refer to go to the [AWS CloudTrail integration](#aws-cloudtrail-integration) section.
 
 ### Event schema
 
+The following example shows the complete schema of event records that can be ingested to AWS CloudTrail Lake. The content of `eventData` is provided by the application that is publishing the event. Other fields are provided by AWS CloudTrail.
+
 ```json
 {
-  "eventVersion": String,
-  "eventCategory": String,
-  "eventType": String,
-  "eventID": String,
-  "eventTime": String,
-  "awsRegion": String,
-  "recipientAccountId": String,
+  "eventID": "string",
+  "eventVersion": "string",
+  "eventCategory": "string",
+  "eventType": "string",
+  "eventTime": "string",
+  "awsRegion": "string",
+  "recipientAccountId": "string",
   "addendum": {
-    "reason": String,
-    "updatedFields": String,
-    "originalUID": String,
-    "originalEventID": String
+    "reason": "string",
+    "updatedFields": "string",
+    "originalUID": "string",
+    "originalEventID": "string"
   },
   "metadata" : {
-    "ingestionTime": String,
-    "ingestionChannelARN": String
+    "ingestionTime": "string",
+    "channelARN": "string"
   },
   "eventData": {
-    "version": String,
+    "version": "string",
     "userIdentity": {
-      "type": String,
-      "principalId": String,
-      "details": {
-        JSON
-      }
+      "type": "string",
+      "principalId": "string",
+      "details": { JSON }
     },
-    "userAgent": String,
-    "eventSource": String,
-    "eventName": String,
-    "eventTime": String,
-    "UID": String,
-    "requestParameters": {
-      JSON
-    },
-    "responseElements": {
-      JSON
-    },
-    "errorCode": String,
-    "errorMessage": String,
-    "sourceIPAddress": String,
-    "recipientAccountId": String,
-    "additionalEventData": {
-      JSON
-    }
+    "userAgent": "string",
+    "eventSource": "string",
+    "eventName": "string",
+    "eventTime": "string",
+    "UID": "string",
+    "requestParameters": { JSON },
+    "responseElements": { JSON },
+    "errorCode": "string",
+    "errorMessage": "string",
+    "sourceIPAddress": "string",
+    "recipientAccountId": "string",
+    "additionalEventData": { JSON }
   }
 }
 ```
 
-For more information please refer to [AWS documentation](https://docs.aws.amazon.com/).
+For more information please refer to official [AWS documentation](https://docs.aws.amazon.com/).
 
-### Prerequisites
+### Getting started
 
-In order receive Cloud Trail Events from third party application like Nordcloud Klarity Site following actions are required:
+In order receive CloudTrail Events from third party application like Nordcloud Klarity Site following actions are required:
 
-1. Create IAM role that allows third party application to use Cloud Trail API. IAM policy can be found in [policy.json](./policy.json) file.
-2. Create Event Data Store in Cloud Trail Lake to store incoming events. You can do that by running following API call:
+1. Create IAM role that allows third party application to use AWS CloudTrail API. IAM policy can be found in [policy.json](./policy.json) file.
+2. Create Event Data Store in AWS CloudTrail Lake to store incoming events. You can do that by running following API call:
 
     ```bash
     aws cloudtrail create-event-data-store \
@@ -103,20 +98,47 @@ In order receive Cloud Trail Events from third party application like Nordcloud 
 3. Create an ingestion channel to ingest events from third party application. You can do that by running following API call:
 
     ```bash
-    aws cloudtrail create-ingestion-channel \
+    aws cloudtrail create-channel \
       --region us-east-1 \
       --name my-customer-ingestion-channel \
       --source-name $partnerSourceName \
-      --event-data-stores ["EXAMPLEg922-5n2l-3vz1-apqw8EXAMPLE"]
+      --destinations '[{"Type": "EventDataStore", "Location": "EXAMPLEf852-4e8f-8bd1-bcf6cEXAMPLE"}]'
     ```
 
-For more details regaring Cloud Trail setup please refer to [AWS documentation](https://docs.aws.amazon.com/).
+4. Use the `PutAuditEvents` API to load events from your third party application:
 
-## Klarity Suite integration
+  ```bash
+  aws cloudtrail-data put-audit-events \
+    --channel-arn $ChannelArn \
+    --audit-events \
+    {
+      "AuditEvents": [
+        {
+          "Id": "original_event_ID",
+          "EventData": "{event_payload}",
+        }
+      ]
+    }
+  ```
 
-### Description
+For more details regarding AWS CloudTrail setup please refer to official [AWS documentation](https://docs.aws.amazon.com/).
 
-Nordcloud Klarity Suite that combines multiple integration is integrated with Cloud Trail Lake to store and monitor customer tenant activity. You can enable this integration to receive logs on activities occurred in your application tenant. Events published by the Nordcloud Klarity Suite can be related to the actions performed by applications on customer cloud environments or any other tenant activity.
+## Nordcloud Klarity
+
+Nordcloud Klarity was developed by Nordcloud, an IBM Company, the European leader in cloud migration, application development and managed services. We like to say Nordcloud Klarity is like autopilot for cloud management, because our goal is to help businesses manage cloud costs, automate operations, improve security and accelerate development with no manual work.
+
+Currently, there are four Nordcloud Klarity tools in the toolkit:
+
+- [Nordcloud Klarity Core](https://klarity.nordcloud.com/products/klarity-core/)
+- [Nordcloud Klarity ImageFactory](https://klarity.nordcloud.com/products/klarity-imagefactory/)
+- [Nordcloud Klarity AutoPatcher](https://klarity.nordcloud.com/products/klarity-autopatcher/)
+- [Nordcloud Klarity AutoBackup](https://klarity.nordcloud.com/products/klarity-autopatcher/)
+
+Together, this suite of cloud management tools gives you the facts you need to understand and optimize your cloud costs, infrastructure, security and data, empowering you to make strategic business decisions.
+
+### AWS CloudTrail integration
+
+Nordcloud Klarity is integrated with Cloud Trail Lake to store and monitor customer tenant activity. You can enable this integration to receive logs on activities occurred in your application tenant. Events published by the Nordcloud Klarity can be related to the actions performed by applications on customer cloud environments or any other tenant activity.
 
 Ingested events are stored in the customer AWS account in Cloud Trail Lake Data Store. Customer can run queries or any other processing on this data.
 
@@ -127,38 +149,60 @@ Example use cases for using Cloud Trail Events:
 - Monitor actions executed by SaaS application on customer AWS accounts or any other environment used by the application.
 - Ensure company compliance by having direct access to all events produced by third party application.
 
-***Nordcloud Klarity Suite is an AWS partner in Cloud Trail Open Events integration. It makes it a trusted source of events and simplifies the integration process.***
+***Nordcloud Klarity is an AWS partner in AWS CloudTrail Lake integration. It makes it a trusted source of events and simplifies the integration process.***
 
-### Enabling integration
+### Enabling integration (AWS Console)
 
-In order to enable Cloud Trail integration with one of Klarity Suite applications please follow the onboarding steps described in [prerequisites](#prerequisites) section. Nordcloud Klarity Suite is an AWS partner so it should be possible to select it when creating ingestion channel. This will create required IAM role with trust relationship to the Klarity proxy account (`855341727128`). IAM role can be created manually as well. Just remember to grant all permissions based on this [policy](./policy.json) and add `855341727128` as a trusted account. Once you have created IAM role and Cloud Trail ingestion channel please contact with your CSM and provide following information:
+Nordcloud Klarity is AWS Partner in AWS CloudTrail Lake so it should be possible to easily enable this integration in AWS Console.
+
+Please navigate to AWS CloudTrail console where you have a CloudTrail Lake event data store enabled. You will be guided on how to enable integration by selecting Nordcloud Klarity from the list of AWS CloudTrail partners.
+
+For more information please refer to official [AWS documentation](https://docs.aws.amazon.com/).
+
+Once you have created IAM role and CloudTrail ingestion channel please contact with your CSM and provide following information:
 
 - IAM role arn
-- IAM role external ID (optional)
-- Ingestion channel ARN 
+- IAM role external ID
+- Ingestion channel ARN
 
-Please note that at the beginning not all Klarity Suite applications will implement Cloud Trail Events. This will be delivered based on our roadmap and customer requirements. To ask for feature availability please contact with your CSM.
+Please note that at the beginning not all Klarity tools will implement AWS CloudTrail activity events. This will be delivered based on our roadmap and customer requirements. To ask for feature availability please contact with your CSM.
+
+### Enabling integration (manual)
+
+In order to manually enable AWS CloudTrail Lake integration with one of Klarity tools please follow the onboarding steps described in [Getting Started](#getting-started) section.
+You can use the [iamRole.yml](./iamRole.yml) AWS CloudFormation template to easily create IAM role with all permissions required by this integration. This will create new IAM role with the trust relationship to the Klarity production account (`855341727128`). IAM Role External ID is optional but we highly encourage you to use it for security reasons.
+
+Once you have created IAM role and AWS CloudTrail ingestion channel please contact with your CSM and provide following information:
+
+- IAM role arn
+- IAM role external ID
+- Ingestion channel ARN
+
+Please note that at the beginning not all Klarity tools will implement AWS CloudTrail activity events. This will be delivered based on our roadmap and customer requirements. To ask for feature availability please contact with your CSM.
+
+### Disabling integration
+
+To disable integration simply navigate to the AWS CloudTrail console and disable integration with Nordcloud Klarity. If you want to remove it completely please remove the created IAM role as well.
 
 ### Event Sources
 
-Single and uniq event source is reserved for each of Klarity Suite application. Currently we have reserved following event sources:
+Single and uniq event source is reserved for each of Klarity tool. Currently we have reserved following event sources:
 
-| Application name | Event Source | Integration enabled |
+| Klarity tool name | Event Source | Integration enabled |
 |---|---|:---:|
-| Klarity Core | com.nordcloudapp.com.klarity | ❌ |
-| Image Factory | com.nordcloudapp.com.imagefactory | ❌ |
-| AutoBackup | com.nordcloudapp.com.autobackup | ❌ |
-| AutoPatcher | com.nordcloudapp.com.autopatcher | ❌ |
-| Maestro | com.nordcloudapp.com.maestro | ❌ |
+| Nordcloud Klarity Core | com.nordcloudapp.com.klarity | ❌ |
+| Nordcloud Klarity ImageFactory | com.nordcloudapp.com.imagefactory | ❌ |
+| Nordcloud Klarity AutoBackup | com.nordcloudapp.com.autobackup | ❌ |
+| Nordcloud Klarity AutoPatcher | com.nordcloudapp.com.autopatcher | ❌ |
 
-Please note that the above list may change in the future once we add new applications to the Klarity Suite.
+Please note that the above list may change in the future once we add new applications to the Klarity.
 
-❌ - *Event source name is reserved for the application but integration is not yet implemented.*
+❌ - *Event source name is reserved for the application but integration is not yet fully implemented.*
 ✅ - *Integration is fully implemented.*
 
 ### Event types
 
-Event types define the activity that happened on application tenant or operation executed by the application on cloud environment. Every application has its own uniq set of event types depending on the functionality. Please check the application specific documentation in [sources](./sources/) directory for more details.
+Event types define the activity that happened on application tenant or operation executed by the application on cloud environment. Every Klarity tool has its own uniq set of events depending on the functionality. Please check the application specific documentation in [event-sources](https://github.com/nordcloud/cloud-trail-actiovity-events/tree/main/event-sources) directory for more details.
 
 ## Architecture
 
@@ -166,10 +210,34 @@ Event types define the activity that happened on application tenant or operation
 
 ## Examples
 
-Example events produced by Klarity Suite applications can be found in [sources](./sources/) directory for specific application.
+As an example, the following activity event is produced by the Klarity Core as an result of creating new discovery rule in `test env` environment by `name@example.com` user.
+
+```json
+{
+    "eventData": {
+        "version": "v1",
+        "userIdentity": {
+            "type": "USER",
+            "principalId": "name@example.com"
+        },
+        "eventSource": "com.nordcloudapp.com.klarity",
+        "eventName": "discoveryRule.created",
+        "eventTime": "2022-07-12T10:55:00",
+        "UID": "00000000-00000000-00000000-00000000",
+        "requestParameters": {
+            "ruleName": "rule name",
+            "ruleId": "00000000-00000000-00000000-00000001",
+            "environment": "test env",
+            "application": "test app"
+        }
+    }
+}
+```
+
+You can find a documentation on all activity events produced by the Klarity tools in [event-sources](https://github.com/nordcloud/cloud-trail-actiovity-events/tree/main/event-sources) directory.
 
 ## Support
 
-To get support on Klarity Cloud Trail integration please contact with your CSM or create ticket using Klarity Suite JSD.
+To get support on the Nordcloud Klarity CloudTrail integration please contact with your CSM or create ticket using Nordcloud Klarity Jira Service Desk.
 
-We strongly encourage you to leave us a feedback regarding this functionality. New applications and events will be delivered based on customer demands.
+We strongly encourage you to leave us a feedback regarding this functionality. New applications and events are going to be delivered based on customer demands.
