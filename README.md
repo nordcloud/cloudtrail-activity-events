@@ -9,8 +9,7 @@
     - [Getting started](#getting-started)
   - [Nordcloud Klarity](#nordcloud-klarity)
     - [AWS CloudTrail integration](#aws-cloudtrail-integration)
-    - [Enabling integration (AWS Console)](#enabling-integration-aws-console)
-    - [Enabling integration (manual)](#enabling-integration-manual)
+    - [Enabling integration in AWS Console](#enabling-integration-in-aws-console)
     - [Disabling integration](#disabling-integration)
     - [Event Sources](#event-sources)
     - [Event Types](#event-types)
@@ -152,28 +151,44 @@ Example use cases for using Cloud Trail Events:
 
 ***Nordcloud Klarity is an AWS partner in AWS CloudTrail Lake integration. It makes it a trusted source of events and simplifies the integration process.***
 
-### Enabling integration (AWS Console)
+### Enabling integration in AWS Console
 
 Nordcloud Klarity is AWS Partner in AWS CloudTrail Lake so it should be possible to easily enable this integration in AWS Console.
 
 Please navigate to AWS CloudTrail console where you have a CloudTrail Lake event data store enabled. You will be guided on how to enable integration by selecting Nordcloud Klarity from the list of AWS CloudTrail partners.
 
+Next step is to Provide Nordcloud Klarity with permissions to call PutAuditEvents API on your behalf.
+IAM permissions define actions that a principal can perform (or is restricted from performing). The permissions define resources on which the actions can (or cannot) be taken.
+
+```json
+{
+  "Effect": "Allow",
+  "Action": "cloudtrail-data:PutAuditEvents",
+  "Resource": "<Channel ARN>"
+}
+```
+
+A trust policy defines which principals can assume the role, and under which conditions. This is
+sometimes called a resource-based policy for the role.
+
+```json
+{
+  "Effect": "Allow",
+  "Principal": {
+    "AWS": "arn:aws:iam::855341727128:root"
+  },
+  "Action": "sts:AssumeRole",
+  "Condition": {
+    "StringEquals": {
+      "sts:ExternalId": "<Channel ARN>"
+    }
+  }
+}
+```
+
 For more information, please refer to official [AWS documentation](https://docs.aws.amazon.com/).
 
 Once you have created IAM role and CloudTrail ingestion channel please contact with your CSM and provide following information:
-
-- IAM role arn
-- IAM role external ID
-- Ingestion channel ARN
-
-Please note that at the beginning not all Klarity tools will implement AWS CloudTrail activity events. This will be delivered based on our roadmap and customer requirements. To ask for feature availability please contact with your CSM.
-
-### Enabling integration (manual)
-
-To to manually enable AWS CloudTrail Lake integration with one of Klarity tools please follow the onboarding steps described in [Getting Started](#getting-started) section.
-You can use the [iamRole.yml](https://github.com/nordcloud/klarity-cloudtrail-activity-events/tree/main/iamRole.yml) AWS CloudFormation template to easily create IAM role with all permissions required by this integration. This will create new IAM role with the trust relationship to the Klarity production account (`855341727128`). IAM Role External ID is optional but we highly encourage you to use it for security reasons.
-
-Once you have created IAM role and AWS CloudTrail ingestion channel please contact with your CSM and provide following information:
 
 - IAM role arn
 - IAM role external ID
