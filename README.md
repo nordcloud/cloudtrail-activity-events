@@ -155,7 +155,8 @@ Nordcloud Klarity is AWS Partner in AWS CloudTrail Lake so it should be possible
 
 Please navigate to AWS CloudTrail console where you have a CloudTrail Lake event data store enabled. You will be guided on how to enable integration by selecting Nordcloud Klarity from the list of AWS CloudTrail partners.
 
-Next step is to Provide Nordcloud Klarity with IAM role permissions to call PutAuditEvents API on your behalf. IAM permissions define actions that a principal can perform (or is restricted from performing). The permissions define resources on which the actions can (or cannot) be taken.
+Next step is to Provide Nordcloud Klarity with permissions to call PutAuditEvents API on your behalf.
+IAM permissions define actions that a principal can perform (or is restricted from performing). The permissions define resources on which the actions can (or cannot) be taken.
 
 ```json
 {
