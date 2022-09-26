@@ -2,7 +2,7 @@
 
 # CREATING EVENT DATA STORE
 # aws cloudtrail create-event-data-store \
-#     --name klarity-activity-events-2 \
+#     --name test \
 #     --region us-east-1 \
 #     --retention-period 30 \
 #     --advanced-event-selectors '[{

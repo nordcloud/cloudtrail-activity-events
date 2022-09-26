@@ -1,7 +1,5 @@
 # Nordcloud Klarity CloudTrail Activity Events
 
-*Disclaimer: Cloud Trail Activity Events are not yet fully integrated with the Nordcloud Klarity. It will be delivered based on the customer demand.*
-
 - [Nordcloud Klarity CloudTrail Activity Events](#nordcloud-klarity-cloudtrail-activity-events)
   - [AWS CloudTrail Activity Events](#aws-cloudtrail-activity-events)
     - [AWS CloudTrail partner](#aws-cloudtrail-partner)
@@ -186,12 +184,11 @@ sometimes called a resource-based policy for the role.
 }
 ```
 
-For more information, please refer to official [AWS documentation](https://docs.aws.amazon.com/).
+For more information, please refer to official [AWS documentation](https://aws.amazon.com/blogs/aws/new-aws-cloudtrail-lake-supports-ingesting-activity-events-from-non-aws-sources/).
 
 Once you have created IAM role and CloudTrail ingestion channel please contact with your CSM and provide following information:
 
 - IAM role arn
-- IAM role external ID
 - Ingestion channel ARN
 
 Please note that at the beginning not all Klarity tools will implement AWS CloudTrail activity events. This will be delivered based on our roadmap and customer requirements. To ask for feature availability please contact with your CSM.
