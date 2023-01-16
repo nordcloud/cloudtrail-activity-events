@@ -3,7 +3,7 @@
         "version": "v1",
         "userIdentity": {
             "type": "USER",
-            "principalId": "name@example.om"
+            "principalId": "name@example.com"
         },
         "eventSource": "com.nordcloudapp.com.klarity",
         "eventName": "discoveryRule.created",

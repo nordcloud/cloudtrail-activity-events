@@ -1,13 +1,14 @@
-# Nordcloud Klarity CloudTrail Activity Events
+# IBM Multicloud CloudTrail Activity Events
 
-- [Nordcloud Klarity CloudTrail Activity Events](#nordcloud-klarity-cloudtrail-activity-events)
+- [IBM Multicloud CloudTrail Activity Events](#ibm-multicloud-cloudtrail-activity-events)
   - [AWS CloudTrail Activity Events](#aws-cloudtrail-activity-events)
     - [AWS CloudTrail partner](#aws-cloudtrail-partner)
     - [Event Schema](#event-schema)
     - [Getting started](#getting-started)
-  - [Nordcloud Klarity](#nordcloud-klarity)
+  - [IBM Multicloud](#ibm-multicloud)
     - [AWS CloudTrail integration](#aws-cloudtrail-integration)
     - [Enabling integration in AWS Console](#enabling-integration-in-aws-console)
+    - [Enabling integration with AWS CLI](#enabling-integration-with-aws-cli)
     - [Disabling integration](#disabling-integration)
     - [Event Sources](#event-sources)
     - [Event Types](#event-types)
@@ -25,11 +26,11 @@ For more information, please refer to official [AWS documentation](https://docs.
 
 ### AWS CloudTrail partner
 
-AWS CloudTrail Lake supports ingesting activity logs from the trusted entities like Nordcloud Klarity that is being an official AWS Partner in CloudTrail Lake activity events.
+AWS CloudTrail Lake supports ingesting activity logs from the trusted entities like IBM Multicloud that is being an official AWS Partner in CloudTrail Lake activity events.
 
-AWS and Klarity teams works together to deliver this integration allowing you to simplify the process of consolidating activity data. It enables the enhanced visibility across applications and environments. In a few steps you can consolidate Klarity activity logs together with AWS activity logs without having additional processing pipelines.
+AWS and IBM Multicloud teams works together to deliver this integration allowing you to simplify the process of consolidating activity data. It enables the enhanced visibility across applications and environments. In a few steps you can consolidate IBM Multicloud activity logs together with AWS activity logs without having additional processing pipelines.
 
-To get started with Klarity integration please refer to go to the [AWS CloudTrail integration](#aws-cloudtrail-integration) section.
+To get started with IBM Multicloud integration please refer to go to the [AWS CloudTrail integration](#aws-cloudtrail-integration) section.
 
 ### Event Schema
 
@@ -81,62 +82,95 @@ For more information, please refer to official [AWS documentation](https://docs.
 
 ### Getting started
 
-To receive CloudTrail Events from third-party applications like Nordcloud Klarity following actions are required:
+To receive CloudTrail Events from third-party application following actions are required:
 
-1. Create an IAM role that allows third-party applications to use AWS CloudTrail API. IAM policy can be found in [policy.json](https://github.com/nordcloud/klarity-cloudtrail-activity-events/tree/main/policy.json) file.
-
-2. Create Event Data Store in AWS CloudTrail Lake to store incoming events. You can do that by running the following API call:
+1. Create Event Data Store in AWS CloudTrail Lake to store incoming events. You can do that by running the following API call:
 
     ```bash
     aws cloudtrail create-event-data-store \
       --name my-event-data-store \
-      --retention-period 90
+      --region us-east-1 \
+      --retention-period 30 \
+      --no-multi-region-enabled \
+      --advanced-event-selectors '[{
+         "Name": "Select all external events",
+         "FieldSelectors": [{ 
+             "Field": "eventCategory", "Equals":["ActivityAuditLog"] 
+         }]
+      }]'
     ```
 
-3. Create an ingestion channel to ingest events from a third-party application. You can do that by running the following API call:
+2. Create an ingestion channel to ingest events from a third-party application. You can do that by running the following API call:
 
     ```bash
     aws cloudtrail create-channel \
       --region us-east-1 \
-      --name my-customer-ingestion-channel \
-      --source-name $partnerSourceName \
-      --destinations '[{"Type": "EventDataStore", "Location": "EXAMPLEf852-4e8f-8bd1-bcf6cEXAMPLE"}]'
+      --name test \
+      --source "Custom" \
+      --destinations "[{
+          \"Type\": \"EVENT_DATA_STORE\", 
+          \"Location\": \"${DATASTORE_ARN}\"
+      }]"
     ```
 
-4. Use the `PutAuditEvents` API to load events from your third-party application:
+3. Apply Resource Based Policy to allow third-party application to publish activity events.
+
+    ```bash
+    aws cloudtrail put-resource-policy \
+      --region us-east-1 \
+      --resource-arn "${CHANNEL_ARN}" \
+      --resource-policy "{
+          \"Version\": \"2012-10-17\",
+          \"Statement\": [{
+              \"Sid\": \"ChannelPolicy\",
+              \"Effect\": \"Allow\",
+              \"Principal\": {
+                  \"AWS\": [\"arn:aws:iam::${SOURCE_ACCOUNT_ID}:root\"]
+              },
+              \"Action\": [\"cloudtrail-data:PutAuditEvents\"],
+              \"Resource\": [\"${CHANNEL_ARN}\"],
+              \"Condition\": {
+                  \"StringEquals\": {
+                      \"cloudtrail:ExternalId\": \"${EXTERNAL_ID}\"
+                  }
+              } 
+          }]
+      }"
+    ```
+
+4. Activity events can now be ingested to your AWS CloudTrail Event Data Store with `PutAuditEvents` API call:
 
     ```bash
     aws cloudtrail-data put-audit-events \
-      --channel-arn $ChannelArn \
-      --audit-events \
-      {
-        "AuditEvents": [
-          {
-            "Id": "original_event_ID",
-            "EventData": "{event_payload}",
-          }
-        ]
-      }
+      --channel-arn $CHANNEL_ARN \
+      --region "us-east-1" \
+      --external-id $EXTERNAL_ID \
+      --audit-events "{
+        \"id\": \"6df0f951-6f16-4e2b-adb4-ababba1edc53\",
+        \"eventData\": \"{ ... }\"
+      }"
     ```
+
+The above configuration allows you to receive activity events from any third-party application. You can find working script example in [enable-custom-integration.sh](./examples/enable-custom-integration.sh) file. If you are interested in enabling integration with trusted Partner like **IBM Multicloud** please refer to the next section.
 
 For more details, please refer to official [AWS documentation](https://docs.aws.amazon.com/).
 
-## Nordcloud Klarity
+## IBM Multicloud
 
-Nordcloud Klarity was developed by Nordcloud, an IBM Company, the European leader in cloud migration, application development and managed services. We like to say Nordcloud Klarity is like autopilot for cloud management, because our goal is to help businesses manage cloud costs, automate operations, improve security and accelerate development with no manual work.
+IBM Multicloud was developed by Nordcloud, an IBM Company, the European leader in cloud migration, application development and managed services. We like to say IBM Multicloud is like autopilot for cloud management, because our goal is to help businesses manage cloud costs, automate operations, improve security and accelerate development with no manual work.
 
-Currently, there are four Nordcloud Klarity tools in the toolkit:
+Currently, there are four IBM Multicloud services in the toolkit:
 
-- [Nordcloud Klarity Core](https://klarity.nordcloud.com/products/klarity-core/)
-- [Nordcloud Klarity ImageFactory](https://klarity.nordcloud.com/products/klarity-imagefactory/)
-- [Nordcloud Klarity AutoPatcher](https://klarity.nordcloud.com/products/klarity-autopatcher/)
-- [Nordcloud Klarity AutoBackup](https://klarity.nordcloud.com/products/klarity-autopatcher/)
+- [IBM Multicloud Accelerator](https://klarity.nordcloud.com/products/klarity-core/)
+- [IBM Multicloud AutoPatcher](https://klarity.nordcloud.com/products/klarity-autopatcher/)
+- [IBM Multicloud AutoBackup](https://klarity.nordcloud.com/products/klarity-autopatcher/)
+- [IBM Multicloud Machine Image Toolkit](https://klarity.nordcloud.com/products/klarity-imagefactory/)
 
 Together, this suite of cloud management tools gives you the facts you need to understand and optimize your cloud costs, infrastructure, security and data, empowering you to make strategic business decisions.
 
 ### AWS CloudTrail integration
 
-Nordcloud Klarity is integrated with Cloud Trail Lake to store and monitor customer tenant activity. You can enable this integration to receive logs on activities in your application tenant. Events published by the Nordcloud Klarity can be related to the actions performed by applications on customer cloud environments or any other tenant activity.
+IBM Multicloud is integrated directly with Cloud Trail Lake to store and monitor customer tenant activity. You can enable this integration to receive logs on activities in your application tenant. Events published by the IBM Multicloud can be related to the actions performed by applications on customer cloud environments or any other tenant activity.
 
 Ingested events are stored in the customer AWS account in Cloud Trail Lake Data Store. Customers can run queries or any other processing on this data.
 
@@ -147,75 +181,61 @@ Example use cases for using Cloud Trail Events:
 - Monitor actions executed by the SaaS application on customer AWS accounts or any other environment used by the application.
 - Ensure company compliance by directly accessing all events produced by a third-party application.
 
-***Nordcloud Klarity is an AWS partner in AWS CloudTrail Lake integration. It makes it a trusted source of events and simplifies the integration process.***
+***IBM Multicloud is an AWS partner in AWS CloudTrail Lake integration. It makes it a trusted source of events and simplifies the integration process.***
 
 ### Enabling integration in AWS Console
 
-Nordcloud Klarity is AWS Partner in AWS CloudTrail Lake so it should be possible to easily enable this integration in AWS Console.
+IBM Multicloud is AWS Partner in AWS CloudTrail Lake so it should be possible to easily enable this integration in AWS Console.
 
-Please navigate to AWS CloudTrail console where you have a CloudTrail Lake event data store enabled. You will be guided on how to enable integration by selecting Nordcloud Klarity from the list of AWS CloudTrail partners.
+// TODO PUT VIDEO HERE //
 
-Next step is to Provide Nordcloud Klarity with permissions to call PutAuditEvents API on your behalf.
-IAM permissions define actions that a principal can perform (or is restricted from performing). The permissions define resources on which the actions can (or cannot) be taken.
+Please navigate to AWS CloudTrail console where you have a CloudTrail Lake event data store enabled. You will be guided on how to enable integration by selecting Nordcloud from the list of AWS CloudTrail partners. You can select existing event data store or create new one. The External ID property should be filled with the unique identifier provided by the IBM Multicloud support. Please contact directly with your CSM to receive this.
 
-```json
-{
-  "Effect": "Allow",
-  "Action": "cloudtrail-data:PutAuditEvents",
-  "Resource": "<Channel ARN>"
-}
-```
-
-A trust policy defines which principals can assume the role, and under which conditions. This is
-sometimes called a resource-based policy for the role.
-
-```json
-{
-  "Effect": "Allow",
-  "Principal": {
-    "AWS": "arn:aws:iam::855341727128:root"
-  },
-  "Action": "sts:AssumeRole",
-  "Condition": {
-    "StringEquals": {
-      "sts:ExternalId": "<Channel ARN>"
-    }
-  }
-}
-```
+Please note that when enabling integration in AWS Console AWS automatically creates the Resource Based Policy allowing IBM Multicloud to send events to your ingestion channel. You do not need to grant any other permissions to make it working.
 
 For more information, please refer to official [AWS documentation](https://aws.amazon.com/blogs/aws/new-aws-cloudtrail-lake-supports-ingesting-activity-events-from-non-aws-sources/).
 
-Once you have created IAM role and CloudTrail ingestion channel please contact with your CSM and provide following information:
+Once you have enabled integration with Nordcloud please contact with your CSM and provide following information:
 
-- IAM role arn
 - Ingestion channel ARN
+- List of IBM Multicloud services you want to enable integration with
 
-Please note that at the beginning not all Klarity tools will implement AWS CloudTrail activity events. This will be delivered based on our roadmap and customer requirements. To ask for feature availability please contact with your CSM.
+Please note that at the beginning not all IBM Multicloud services implements AWS CloudTrail activity events. This will be delivered based on our roadmap and customer requirements. To ask for feature availability please contact with your CSM.
+
+### Enabling integration with AWS CLI
+
+Integration with IBM Multicloud can be enabled with AWS CLI as well. However you will have to create the correct Resource Based Policy on your own. The full example can be found in [enable-ibm-multicloud-integration.sh](./examples/enable-ibm-multicloud-integration.sh) file.
 
 ### Disabling integration
 
-To disable integration simply navigate to the AWS CloudTrail console and disable integration with Nordcloud Klarity. If you want to remove it completely please remove the created IAM role as well.
+To disable integration simply navigate to the AWS CloudTrail Lake console and delete integration with IBM Multicloud. Your data store won't receive any more events from IBM Multicloud and we won't be able to publish them.
+
+To delete integration with API call you can run following command:
+
+  ```bash
+  aws cloudtrail delete-channel \ 
+    --channel $CHANNEL_ARN
+  ```
 
 ### Event Sources
 
-A single and unique event source is reserved for each of Klarity tool. Currently, we we have secured the following event sources:
+A single and unique event source is reserved for each of IBM Multicloud service. Currently, we we have secured the following event sources:
 
-| Klarity tool name | Event Source | Integration enabled |
+| Service name | Event Source | Integration enabled |
 |---|---|:---:|
-| Nordcloud Klarity Core | com.nordcloudapp.com.klarity | ❌ |
-| Nordcloud Klarity ImageFactory | com.nordcloudapp.com.imagefactory | ❌ |
-| Nordcloud Klarity AutoBackup | com.nordcloudapp.com.autobackup | ❌ |
-| Nordcloud Klarity AutoPatcher | com.nordcloudapp.com.autopatcher | ❌ |
+| IBM Multicloud Accelerator | com.nordcloudapp.com.klarity | ❌ |
+| IBM Multicloud AutoBackup | com.nordcloudapp.com.autobackup | ❌ |
+| IBM Multicloud AutoPatcher | com.nordcloudapp.com.autopatcher | ❌ |
+| IBM Multicloud Machine Image Toolkit | com.nordcloudapp.com.imagefactory | ❌ |
 
-Please note that the above list may change in the future once we add new applications to the Klarity.
+Please note that the above list may change in the future once we add new service to the IBM Multicloud.
 
 ❌ - *The Event source name is reserved for the application but integration is not yet fully implemented.*
 ✅ - *Integration is fully implemented.*
 
 ### Event Types
 
-Event types define the activity that happened on the application tenant or operation executed by the application in the cloud environment. Every Klarity tool has its own uniq set of events depending on the functionality. Please check the application specific documentation in the [event-sources](https://github.com/nordcloud/klarity-cloudtrail-activity-events/tree/main/event-sources) directory for more details.
+Event types define the activity that happened on the application tenant or operation executed by the application in the cloud environment. Every IBM Multicloud service has its own uniq set of events depending on the functionality. Please check the application specific documentation in the [event-sources](https://github.com/nordcloud/cloudtrail-activity-events/tree/main/event-sources) directory for more details.
 
 ## Architecture
 
@@ -223,7 +243,7 @@ Event types define the activity that happened on the application tenant or opera
 
 ## Examples
 
-As an example, the following activity event is produced by the Klarity Core as an result of creating new discovery rule in `test env` environment by `name@example.com` user.
+As an example, the following activity event is produced by the IBM Multicloud Accelerator as an result of creating new discovery rule in `test env` environment by `name@example.com` user.
 
 ```json
 {
@@ -247,10 +267,10 @@ As an example, the following activity event is produced by the Klarity Core as a
 }
 ```
 
-You can find a documentation on all activity events produced by the Klarity tools in the [event-sources](https://github.com/nordcloud/klarity-cloudtrail-activity-events/tree/main/event-sources) directory.
+You can find a documentation on all activity events produced by the IBM Multicloud tools in the [event-sources](https://github.com/nordcloud/cloudtrail-activity-events/tree/main/event-sources) directory.
 
 ## Support
 
-To get support on the Nordcloud Klarity CloudTrail integration please contact with your CSM or create ticket using Nordcloud Klarity Jira Service Desk.
+To get support on the IBM Multicloud CloudTrail integration please contact with your CSM directly.
 
 We strongly encourage you to leave us a feedback regarding this functionality. New applications and events are going to be delivered based on customer demands.

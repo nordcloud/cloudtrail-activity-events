@@ -1,6 +1,8 @@
-# Autobackup
+# IBM Multicloud Autobackup
 
-Autobackup currently does not support Cloud Trail integration. This document is an example only.
+IBM Multicloud Autobackup currently does not support Cloud Trail integration. This document is an example only.
+
+Please contact our IBM Multicloud support to get it working.
 
 ## Event types
 
