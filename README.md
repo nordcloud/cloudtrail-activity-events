@@ -1,5 +1,7 @@
 # IBM Multicloud CloudTrail Activity Events
 
+![IBM Multicloud CloudTrail integration](img/top.png)
+
 - [IBM Multicloud CloudTrail Activity Events](#ibm-multicloud-cloudtrail-activity-events)
   - [AWS CloudTrail Activity Events](#aws-cloudtrail-activity-events)
     - [AWS CloudTrail partner](#aws-cloudtrail-partner)
