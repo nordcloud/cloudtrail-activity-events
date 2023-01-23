@@ -189,8 +189,6 @@ Example use cases for using Cloud Trail Events:
 
 IBM Multicloud is AWS Partner in AWS CloudTrail Lake so it should be possible to easily enable this integration in AWS Console.
 
-// TODO PUT VIDEO HERE //
-
 Please navigate to AWS CloudTrail console where you have a CloudTrail Lake event data store enabled. You will be guided on how to enable integration by selecting Nordcloud from the list of AWS CloudTrail partners. You can select existing event data store or create new one. The External ID property should be filled with the unique identifier provided by the IBM Multicloud support. Please contact directly with your CSM to receive this.
 
 Please note that when enabling integration in AWS Console AWS automatically creates the Resource Based Policy allowing IBM Multicloud to send events to your ingestion channel. You do not need to grant any other permissions to make it working.
@@ -225,10 +223,11 @@ A single and unique event source is reserved for each of IBM Multicloud service.
 
 | Service name | Event Source | Integration enabled |
 |---|---|:---:|
-| IBM Multicloud Accelerator | com.nordcloudapp.com.klarity | ❌ |
-| IBM Multicloud AutoBackup | com.nordcloudapp.com.autobackup | ❌ |
-| IBM Multicloud AutoPatcher | com.nordcloudapp.com.autopatcher | ❌ |
-| IBM Multicloud Machine Image Toolkit | com.nordcloudapp.com.imagefactory | ❌ |
+| IBM Multicloud Accelerator | com.nordcloudapp.klarity | ❌ |
+| IBM Multicloud AutoBackup | com.nordcloudapp.autobackup | ❌ |
+| IBM Multicloud AutoPatcher | com.nordcloudapp.autopatcher | ❌ |
+| IBM Multicloud Machine Image Toolkit | com.nordcloudapp.imagefactory | ✅ |
+| IBM Multicloud Maestro | com.nordcloudapp.maestro | ✅ |
 
 Please note that the above list may change in the future once we add new service to the IBM Multicloud.
 
