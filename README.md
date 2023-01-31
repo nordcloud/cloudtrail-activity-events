@@ -24,7 +24,7 @@ AWS CloudTrail Lake let you use CloudTrail to log and store user activity data f
 
 Once you get event data from third-party application or via `PutAuditEvents` API, you can create event data stores in AWS CloudTrail Lake, and use it to search, query, and analyze the data that is logged from your applications. To help you meet compliance resources this data is backed by a 7-year default retention period.
 
-For more information, please refer to official [AWS documentation](https://docs.aws.amazon.com/).
+For more information, please refer to official [AWS documentation](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store-integration.html).
 
 ### AWS CloudTrail partner
 
@@ -80,7 +80,7 @@ The following example shows the complete schema of event records that can be ing
 }
 ```
 
-For more information, please refer to official [AWS documentation](https://docs.aws.amazon.com/).
+For more information, please refer to official [AWS documentation](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store-integration.html).
 
 ### Getting started
 
@@ -155,7 +155,7 @@ To receive CloudTrail Events from third-party application following actions are 
 
 The above configuration allows you to receive activity events from any third-party application. You can find working script example in [enable-custom-integration.sh](./examples/enable-custom-integration.sh) file. If you are interested in enabling integration with trusted Partner like **IBM Multicloud** please refer to the next section.
 
-For more details, please refer to official [AWS documentation](https://docs.aws.amazon.com/).
+For more details, please refer to official [AWS documentation](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store-integration.html).
 
 ## IBM Multicloud
 
@@ -193,7 +193,7 @@ Please navigate to AWS CloudTrail console where you have a CloudTrail Lake event
 
 Please note that when enabling integration in AWS Console AWS automatically creates the Resource Based Policy allowing IBM Multicloud to send events to your ingestion channel. You do not need to grant any other permissions to make it working.
 
-For more information, please refer to official [AWS documentation](https://aws.amazon.com/blogs/aws/new-aws-cloudtrail-lake-supports-ingesting-activity-events-from-non-aws-sources/).
+For more information, please refer to official [AWS documentation](https://docs.aws.amazon.com/awscloudtrail/latest/userguide/query-event-data-store-integration.html).
 
 Once you have enabled integration with Nordcloud please contact with your CSM and provide following information:
 
