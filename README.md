@@ -227,7 +227,7 @@ A single and unique event source is reserved for each of IBM Multicloud service.
 | IBM Multicloud AutoBackup | com.nordcloudapp.autobackup | ❌ |
 | IBM Multicloud AutoPatcher | com.nordcloudapp.autopatcher | ❌ |
 | IBM Multicloud Machine Image Toolkit | com.nordcloudapp.imagefactory | ✅ |
-| IBM Multicloud Maestro | com.nordcloudapp.maestro | ✅ |
+| IBM Multicloud Provisioning | com.nordcloudapp.maestro | ✅ |
 
 Please note that the above list may change in the future once we add new service to the IBM Multicloud.
 
